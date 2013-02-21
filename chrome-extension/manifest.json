@@ -1,0 +1,29 @@
+{
+  "manifest_version": 2,
+
+  "name": "Crosswired",
+  "description": "Social snippets service for users on The Guardian website",
+  "version": "0.1",
+  "icons": {
+    "16": "static/ico/16x16.png",
+    "48": "static/ico/48x48.png",
+    "128": "static/ico/128x128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://www.guardian.co.uk/crosswords/*"],
+      "css": ["static/css/crosswired.css"],
+      "js": [
+        "static/js/lib/socket.io.min.js",
+        "static/js/lib/jquery.min.js",
+        "static/js/crosswired.js"
+      ]
+    }
+  ],
+  "permissions": [
+    "https://localhost:8082/*"
+  ],
+  "web_accessible_resources": [
+    "static/js/getCrossword.js"
+  ]
+}
