@@ -7,10 +7,14 @@ $(function initialize() {
 
 var Crosswired = (function() {
   var el
+    , crosswordEl
+    , actionsEl
+    , startGameButton
+    , joinGameButton
     , config = {
-      id: null,
-      intersections: null
-    };
+        id: null,
+        intersections: null
+      };
 
   function init() {
     // getting the crossword vars from the window elements
@@ -29,15 +33,37 @@ var Crosswired = (function() {
 
 
   function start() {
+    setUI();
+    setEvents();
+    socket.on('crossword:letterchange', receivedLetter);
+  }
+
+  function setUI() {
     el = $('.crossword');
+    crosswordEl = $('#crossword', el);
+    actionsEl = $('<div class="crosswired-actions"></div>');
+    startGameButton = $('<button name="crosswired-start">Start a crosswire</button>');
+    joinGameButton = $('<button name="crosswired-join">Get crosswired</button>');
+
+    actionsEl.prepend(startGameButton, joinGameButton);
+
+    crosswordEl.before(actionsEl);
+  }
+
+  function setEvents() {
+    startGameButton.on('click', startGame);
+
+    // when people enter values
     $('input', el).on('keyup', function() {
       var name = this.name
         , val = this.value;
 
       socket.emit('crossword:letterchange', config.id, { name: name, val: val });
     });
+  }
 
-    socket.on('crossword:letterchange', receivedLetter);
+  function startGame() {
+    console.log(socket.id);
   }
 
   function receivedLetter(letter) {
