@@ -4,7 +4,14 @@ var app = require('express')()
 
 server.listen(8082);
 io.sockets.on('connection', function (socket) {
-  socket.on('crossword:letterchange', function (letter) {
-    socket.broadcast.emit('crossword:letterchange', letter);
+  
+  socket.on('join', function (crossword) {
+    socket.join(crossword.id);
   });
+
+  socket.on('crossword:letterchange', function (crosswordId, letter) {
+    socket.broadcast.to(crosswordId).emit('crossword:letterchange', letter);
+  });
+
+
 });
